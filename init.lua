@@ -87,11 +87,11 @@ P.S. You can delete this when you're done too. It's your config now! :)
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.mapleader = ','
+vim.g.maplocalleader = ','
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -115,7 +115,7 @@ vim.opt.showmode = false
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
+  -- vim.opt.clipboard = 'unnamedplus'
 end)
 
 -- Enable break indent
@@ -968,3 +968,35 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+vim.schedule(function()
+  require 'mappings'
+end)
+
+local lspconfig = require 'lspconfig'
+
+-- local on_attach = function(client)
+-- require('completion').on_attach(client)
+-- end
+--
+lspconfig.rust_analyzer.setup {
+  -- on_attach = on_attach,
+  settings = {
+    ['rust-analyzer'] = {
+      imports = {
+        granularity = {
+          group = 'module',
+        },
+        prefix = 'self',
+      },
+      cargo = {
+        buildScripts = {
+          enable = true,
+        },
+      },
+      procMacro = {
+        enable = true,
+      },
+    },
+  },
+}
