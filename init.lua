@@ -234,6 +234,8 @@ require('lazy').setup({
   'kabouzeid/nvim-jellybeans',
   { 'projekt0n/github-nvim-theme', name = 'github-theme' },
   'TamaMcGlinn/quickfixdd',
+  'EdenEast/nightfox.nvim',
+  'nvim-treesitter/nvim-treesitter-context',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
