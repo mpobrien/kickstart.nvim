@@ -20,7 +20,7 @@ map('x', '<A-j>', ":m '>+1<cr>gv=gv", { noremap = true, silent = true, desc = 'M
 map('x', '<A-k>', ":m '<-2<cr>gv=gv", { noremap = true, silent = true, desc = 'Move block up' })
 
 -- Copy/paste to/from system clipboard
-map('n', '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
-map('n', '<leader>Y', '"+Y', { desc = 'Yank line to system clipboard' })
-map('n', '<leader>p', '"+p', { desc = 'Paste from system clipboard after cursor' })
-map('n', '<leader>P', '"+P', { desc = 'Paste from system clipboard before cursor' })
+map({ 'n', 'v' }, '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
+map({ 'n', 'v' }, '<leader>Y', '"+Y', { desc = 'Yank line to system clipboard' })
+map({ 'n', 'v' }, '<leader>p', '"+p', { desc = 'Paste from system clipboard after cursor' })
+map({ 'n', 'v' }, '<leader>P', '"+P', { desc = 'Paste from system clipboard before cursor' })
