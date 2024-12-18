@@ -12,12 +12,12 @@ map('n', '<leader>/', ':norm gcc<CR>', { remap = true, desc = 'Toggle comments' 
 map('v', '<leader>/', 'gc', { remap = true, desc = 'Toggle comments' })
 
 -- Alt + jk to move line up/down
-map('n', '<A-j>', ':m .+1<cr>==', { noremap = true, silent = true, desc = 'Move line down' })
-map('n', '<A-k>', ':m .-2<cr>==', { noremap = true, silent = true, desc = 'Move line up' })
-map('i', '<A-j>', '<Esc>:m .+1<cr>==gi', { noremap = true, silent = true, desc = 'Move line down (insert mode)' })
-map('i', '<A-k>', '<Esc>:m .-2<cr>==gi', { noremap = true, silent = true, desc = 'Move line up (insert mode)' })
-map('x', '<A-j>', ":m '>+1<cr>gv=gv", { noremap = true, silent = true, desc = 'Move block down' })
-map('x', '<A-k>', ":m '<-2<cr>gv=gv", { noremap = true, silent = true, desc = 'Move block up' })
+-- map('n', '<A-j>', ':m .+1<cr>==', { noremap = true, silent = true, desc = 'Move line down' })
+-- map('n', '<A-k>', ':m .-2<cr>==', { noremap = true, silent = true, desc = 'Move line up' })
+-- map('i', '<A-j>', '<Esc>:m .+1<cr>==gi', { noremap = true, silent = true, desc = 'Move line down (insert mode)' })
+-- map('i', '<A-k>', '<Esc>:m .-2<cr>==gi', { noremap = true, silent = true, desc = 'Move line up (insert mode)' })
+-- map('x', '<A-j>', ":m '>+1<cr>gv=gv", { noremap = true, silent = true, desc = 'Move block down' })
+-- map('x', '<A-k>', ":m '<-2<cr>gv=gv", { noremap = true, silent = true, desc = 'Move block up' })
 
 -- Copy/paste to/from system clipboard
 map({ 'n', 'v' }, '<leader>y', '"+y', { desc = 'Yank to system clipboard' })

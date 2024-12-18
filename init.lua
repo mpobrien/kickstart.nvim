@@ -715,6 +715,9 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        rust = { 'rustfmt', lsp_format = 'fallback', command = 'cargo +nightly fmt' },
+        proto = { 'buf' },
+        toml = { 'taplo' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -999,6 +1002,11 @@ lspconfig.rust_analyzer.setup {
         buildScripts = {
           enable = true,
         },
+        targetDir = true,
+        features = 'all',
+      },
+      rustfmt = {
+        extraArgs = { '+nightly' },
       },
       procMacro = {
         enable = true,
