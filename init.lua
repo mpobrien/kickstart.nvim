@@ -231,10 +231,23 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'rktjmp/lush.nvim',
+
+  -- color schemes
   'kabouzeid/nvim-jellybeans',
   { 'projekt0n/github-nvim-theme', name = 'github-theme' },
   'TamaMcGlinn/quickfixdd',
+  'rebelot/kanagawa.nvim',
+  'navarasu/onedark.nvim',
+  'Mofiqul/vscode.nvim',
+  'Mofiqul/vscode.nvim',
+  'olimorris/onedarkpro.nvim',
+  'sainnhe/sonokai',
+  'AlexvZyl/nordic.nvim',
   'EdenEast/nightfox.nvim',
+  'neanias/everforest-nvim',
+  'sainnhe/edge',
+
+  --
   'nvim-treesitter/nvim-treesitter-context',
 
   -- NOTE: Plugins can also be added by using a table,
@@ -393,7 +406,11 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          colorscheme = {
+            enable_preview = true,
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -1015,4 +1032,4 @@ lspconfig.rust_analyzer.setup {
   },
 }
 
-vim.cmd [[colorscheme github_light]]
+vim.cmd [[colorscheme kanagawa]]
