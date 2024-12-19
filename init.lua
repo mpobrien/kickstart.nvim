@@ -1032,4 +1032,8 @@ lspconfig.rust_analyzer.setup {
   },
 }
 
+lspconfig.clangd.setup {
+  cmd = { '/usr/bin/clangd-18' },
+}
+
 vim.cmd [[colorscheme kanagawa]]
