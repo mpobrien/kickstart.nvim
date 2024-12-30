@@ -231,8 +231,16 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'rktjmp/lush.nvim',
+  {
+    'goolord/alpha-nvim',
+    dependencies = { 'echasnovski/mini.icons' },
+    config = function()
+      require('alpha').setup(require('alpha.themes.startify').config)
+    end,
+  },
 
   -- color schemes
+  'luisiacc/gruvbox-baby',
   'kabouzeid/nvim-jellybeans',
   { 'projekt0n/github-nvim-theme', name = 'github-theme' },
   'TamaMcGlinn/quickfixdd',
@@ -1051,3 +1059,6 @@ vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 
 vim.cmd [[colorscheme jellybeans]]
+
+-- Underline context section to separate it from main code.
+vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline = true, sp = 'Grey' })
