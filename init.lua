@@ -1032,8 +1032,22 @@ lspconfig.rust_analyzer.setup {
   },
 }
 
-lspconfig.clangd.setup {
-  cmd = { '/usr/bin/clangd-18' },
-}
+local exists = function(name)
+  if type(name) ~= 'string' then
+    return false
+  end
+  return os.execute('test -e ' .. name)
+end
 
-vim.cmd [[colorscheme kanagawa]]
+if exists '/usr/bin/clangd-18' then
+  lspconfig.clangd.setup {
+    cmd = { '/usr/bin/clangd' },
+  }
+else
+  lspconfig.clangd.setup {}
+end
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.expandtab = true
+
+vim.cmd [[colorscheme jellybeans]]
