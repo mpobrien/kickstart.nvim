@@ -24,3 +24,7 @@ map({ 'n', 'v' }, '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
 map({ 'n', 'v' }, '<leader>Y', '"+Y', { desc = 'Yank line to system clipboard' })
 map({ 'n', 'v' }, '<leader>p', '"+p', { desc = 'Paste from system clipboard after cursor' })
 map({ 'n', 'v' }, '<leader>P', '"+P', { desc = 'Paste from system clipboard before cursor' })
+map('n', '<leader>e', function()
+  vim.diagnostic.open_float(0, { scope = 'line' })
+end)
+-- map <space>e :lua vim.diagnostic.open_float(0, {scope="line"})<CR>
