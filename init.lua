@@ -235,7 +235,8 @@ require('lazy').setup({
     'goolord/alpha-nvim',
     dependencies = { 'echasnovski/mini.icons' },
     config = function()
-      require('alpha').setup(require('alpha.themes.startify').config)
+      local conf = require('alpha.themes.startify').config
+      require('alpha').setup(conf)
     end,
   },
 
@@ -1049,7 +1050,7 @@ end
 
 if exists '/usr/bin/clangd-18' then
   lspconfig.clangd.setup {
-    cmd = { '/usr/bin/clangd' },
+    cmd = { '/usr/bin/clangd-18' },
   }
 else
   lspconfig.clangd.setup {}
