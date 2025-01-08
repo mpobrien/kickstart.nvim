@@ -239,6 +239,8 @@ require('lazy').setup({
       require('alpha').setup(conf)
     end,
   },
+  'chrisbra/Colorizer',
+  'linrongbin16/gitlinker.nvim',
 
   -- color schemes
   'luisiacc/gruvbox-baby',
@@ -647,7 +649,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        clangd = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -748,7 +750,7 @@ require('lazy').setup({
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -1047,6 +1049,8 @@ local exists = function(name)
   end
   return os.execute('test -e ' .. name)
 end
+
+require('gitlinker').setup()
 
 if exists '/usr/bin/clangd-18' then
   lspconfig.clangd.setup {
