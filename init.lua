@@ -1081,6 +1081,12 @@ require('conform').setup {
   },
 }
 
+require('conform').formatters.taplo = {
+  command = 'taplo',
+  inherit = false,
+  args = 'format --option indent_string="    " -',
+}
+
 local exists = function(name)
   if type(name) ~= 'string' then
     return false
