@@ -1091,7 +1091,7 @@ local exists = function(name)
   if type(name) ~= 'string' then
     return false
   end
-  return os.execute('test -e ' .. name)
+  return os.execute('test -e ' .. name) == 0
 end
 
 require('gitlinker').setup()
