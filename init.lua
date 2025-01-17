@@ -1109,5 +1109,17 @@ vim.opt.expandtab = true
 
 vim.cmd [[colorscheme jellybeans]]
 
+require('treesitter-context').setup {
+  enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+  max_lines = 20,
+  min_window_height = 50,
+  line_numbers = true,
+  multiline_threshold = 15, -- Maximum number of lines to show for a single context
+  trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+  mode = 'cursor', -- Line used to calculate context. Choices: 'cursor', 'topline'
+  zindex = 20, -- The Z-index of the context window
+  on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+}
+
 -- Underline context section to separate it from main code.
 vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline = true, sp = 'Grey' })
