@@ -3,8 +3,6 @@
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
 ========         |.-""""""""""""""""""-.|   |-----|          ========
 ========         ||                    ||   | === |          ========
 ========         ||   KICKSTART.NVIM   ||   |-----|          ========
@@ -241,11 +239,14 @@ require('lazy').setup({
   },
   'chrisbra/Colorizer',
   'linrongbin16/gitlinker.nvim',
+  'susliko/tla.nvim',
+  'mlr-msft/vim-loves-dafny',
 
   -- color schemes
   'luisiacc/gruvbox-baby',
   'kabouzeid/nvim-jellybeans',
   { 'projekt0n/github-nvim-theme', name = 'github-theme' },
+  'vague2k/vague.nvim',
   'TamaMcGlinn/quickfixdd',
   'rebelot/kanagawa.nvim',
   'navarasu/onedark.nvim',
@@ -257,8 +258,10 @@ require('lazy').setup({
   'EdenEast/nightfox.nvim',
   'neanias/everforest-nvim',
   'sainnhe/edge',
+  'cvigilv/patana.nvim',
 
   --
+  'karb94/neoscroll.nvim',
   'nvim-treesitter/nvim-treesitter-context',
 
   -- NOTE: Plugins can also be added by using a table,
@@ -1087,6 +1090,41 @@ require('conform').formatters.taplo = {
   args = 'format --option indent_string="    " -',
 }
 
+require('neoscroll').setup {
+  mappings = { -- Keys to be mapped to their corresponding default scrolling animation
+    '<C-u>',
+    '<C-d>',
+    '<C-b>',
+    '<C-f>',
+    '<C-y>',
+    '<C-e>',
+    'zt',
+    'zz',
+    'zb',
+  },
+  hide_cursor = true, -- Hide cursor while scrolling
+  stop_eof = true, -- Stop at <EOF> when scrolling downwards
+  respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
+  cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
+  duration_multiplier = 0.3, -- Global duration multiplier
+  easing = 'linear', -- Default easing function
+  pre_hook = nil, -- Function to run before the scrolling animation starts
+  post_hook = nil, -- Function to run after the scrolling animation ends
+  performance_mode = false, -- Disable "Performance Mode" on all buffers.
+  ignored_events = { -- Events ignored while scrolling
+    'WinScrolled',
+    'CursorMoved',
+  },
+}
+
+require('tla').setup {
+  -- Path to java binary directory. $JAVA_HOME by default
+  java_executable = '/usr/bin/java',
+
+  -- Options passed to the jvm when running tla2tools
+  java_opts = { '-XX:+UseParallelGC' },
+}
+
 local exists = function(name)
   if type(name) ~= 'string' then
     return false
@@ -1103,9 +1141,13 @@ if exists '/usr/bin/clangd-18' then
 else
   lspconfig.clangd.setup {}
 end
+
+lspconfig.dafny.setup {}
+
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.expandtab = true
+vim.opt.wrap = false
 
 vim.cmd [[colorscheme jellybeans]]
 
