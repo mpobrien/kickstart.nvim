@@ -241,6 +241,7 @@ require('lazy').setup({
   'linrongbin16/gitlinker.nvim',
   'susliko/tla.nvim',
   'mlr-msft/vim-loves-dafny',
+  'FabijanZulj/blame.nvim',
 
   -- color schemes
   'luisiacc/gruvbox-baby',
@@ -1150,6 +1151,8 @@ vim.opt.expandtab = true
 vim.opt.wrap = false
 
 vim.cmd [[colorscheme jellybeans]]
+
+require('blame').setup {}
 
 require('treesitter-context').setup {
   enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
