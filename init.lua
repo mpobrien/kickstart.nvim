@@ -1091,32 +1091,50 @@ require('conform').formatters.taplo = {
   args = 'format --option indent_string="    " -',
 }
 
-require('neoscroll').setup {
-  mappings = { -- Keys to be mapped to their corresponding default scrolling animation
-    '<C-u>',
-    '<C-d>',
-    '<C-b>',
-    '<C-f>',
-    '<C-y>',
-    '<C-e>',
-    'zt',
-    'zz',
-    'zb',
-  },
-  hide_cursor = true, -- Hide cursor while scrolling
-  stop_eof = true, -- Stop at <EOF> when scrolling downwards
-  respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
-  cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
-  duration_multiplier = 0.2, -- Global duration multiplier
-  easing = 'circular', -- Default easing function
-  pre_hook = nil, -- Function to run before the scrolling animation starts
-  post_hook = nil, -- Function to run after the scrolling animation ends
-  performance_mode = false, -- Disable "Performance Mode" on all buffers.
-  ignored_events = { -- Events ignored while scrolling
-    'WinScrolled',
-    'CursorMoved',
-  },
-}
+local exists = function(name)
+  if type(name) ~= 'string' then
+    return false
+  end
+  return os.execute('test -e ' .. name) == 0
+end
+
+if exists '/usr/bin/clangd-18' then
+  lspconfig.clangd.setup {
+    cmd = { '/usr/bin/clangd-18' },
+  }
+else
+  lspconfig.clangd.setup {}
+end
+
+if vim.env.SSH_CLIENT == nil or vim.env.SSH_CLIENT == '' then
+  -- Disable neoscroll over SSH since it can be laggy.
+  require('neoscroll').setup {
+    mappings = { -- Keys to be mapped to their corresponding default scrolling animation
+      '<C-u>',
+      '<C-d>',
+      '<C-b>',
+      '<C-f>',
+      '<C-y>',
+      '<C-e>',
+      'zt',
+      'zz',
+      'zb',
+    },
+    hide_cursor = true, -- Hide cursor while scrolling
+    stop_eof = true, -- Stop at <EOF> when scrolling downwards
+    respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
+    cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
+    duration_multiplier = 0.2, -- Global duration multiplier
+    easing = 'circular', -- Default easing function
+    pre_hook = nil, -- Function to run before the scrolling animation starts
+    post_hook = nil, -- Function to run after the scrolling animation ends
+    performance_mode = false, -- Disable "Performance Mode" on all buffers.
+    ignored_events = { -- Events ignored while scrolling
+      'WinScrolled',
+      'CursorMoved',
+    },
+  }
+end
 
 require('tla').setup {
   -- Path to java binary directory. $JAVA_HOME by default
@@ -1125,13 +1143,6 @@ require('tla').setup {
   -- Options passed to the jvm when running tla2tools
   java_opts = { '-XX:+UseParallelGC' },
 }
-
-local exists = function(name)
-  if type(name) ~= 'string' then
-    return false
-  end
-  return os.execute('test -e ' .. name) == 0
-end
 
 require('gitlinker').setup()
 
