@@ -754,6 +754,36 @@ require('lazy').setup({
     cmd = { 'ConformInfo' },
     keys = {
       {
+        '<leader>tf',
+        function()
+          -- If autoformat is currently disabled for this buffer,
+          -- then enable it, otherwise disable it
+          if vim.b.disable_autoformat then
+            vim.cmd 'FormatEnable'
+            vim.notify 'Enabled autoformat for current buffer'
+          else
+            vim.cmd 'FormatDisable!'
+            vim.notify 'Disabled autoformat for current buffer'
+          end
+        end,
+        desc = 'Toggle autoformat for current buffer',
+      },
+      {
+        '<leader>tF',
+        function()
+          -- If autoformat is currently disabled globally,
+          -- then enable it globally, otherwise disable it globally
+          if vim.g.disable_autoformat then
+            vim.cmd 'FormatEnable'
+            vim.notify 'Enabled autoformat globally'
+          else
+            vim.cmd 'FormatDisable'
+            vim.notify 'Disabled autoformat globally'
+          end
+        end,
+        desc = 'Toggle autoformat globally',
+      },
+      {
         '<leader>f',
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
@@ -1163,6 +1193,24 @@ vim.opt.wrap = false
 
 vim.cmd [[colorscheme jellybeans]]
 
+vim.api.nvim_create_user_command('FormatDisable', function(args)
+  if args.bang then
+    -- FormatDisable! will disable formatting just for this buffer
+    vim.b.disable_autoformat = true
+  else
+    vim.g.disable_autoformat = true
+  end
+end, {
+  desc = 'Disable autoformat-on-save',
+  bang = true,
+})
+vim.api.nvim_create_user_command('FormatEnable', function()
+  vim.b.disable_autoformat = false
+  vim.g.disable_autoformat = false
+end, {
+  desc = 'Re-enable autoformat-on-save',
+})
+
 require('blame').setup {}
 
 require('treesitter-context').setup {
@@ -1175,6 +1223,28 @@ require('treesitter-context').setup {
   mode = 'cursor', -- Line used to calculate context. Choices: 'cursor', 'topline'
   zindex = 20, -- The Z-index of the context window
   on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+}
+
+require('conform').setup {
+  format_after_save = function(bufnr)
+    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+      return
+    end
+    return { lsp_format = 'fallback' }
+  end,
+}
+
+vim.g.clipboard = {
+  name = 'myClipboard',
+  copy = {
+    ['+'] = { 'pbcopy' },
+    ['*'] = { 'pbcopy' },
+  },
+  paste = {
+    ['+'] = { 'pbpaste' },
+    ['*'] = { 'pbpaste' },
+  },
+  cache_enabled = 1,
 }
 
 -- Underline context section to separate it from main code.
