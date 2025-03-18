@@ -233,8 +233,19 @@ require('lazy').setup({
     'goolord/alpha-nvim',
     dependencies = { 'echasnovski/mini.icons' },
     config = function()
-      local conf = require('alpha.themes.startify').config
-      require('alpha').setup(conf)
+      local theme = require 'alpha.themes.startify'
+      theme.section.header.val = {
+        '                                         ███',
+        '                                         ░░░',
+        '████████    ██████   ██████  █████ █████ ████  █████████████',
+        '░███░░███  ███░░███ ███░░███░░███ ░░███ ░░███ ░░███░░███░░███ ',
+        '░███ ░███ ░███████ ░███ ░███ ░███  ░███  ░███  ░███ ░███ ░███ ',
+        '░███ ░███ ░███░░░  ░███ ░███ ░░███ ███   ░███  ░███ ░███ ░███ ',
+        '████ █████░░██████ ░░██████   ░░█████    █████ █████░███ █████',
+        '░░░ ░░░░░  ░░░░░░   ░░░░░░     ░░░░░    ░░░░░ ░░░░░ ░░░ ░░░░░',
+        t,
+      }
+      require('alpha').setup(theme.config)
     end,
   },
   'chrisbra/Colorizer',
