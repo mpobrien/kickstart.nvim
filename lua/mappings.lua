@@ -10,6 +10,7 @@ end, { desc = 'Toggle inlay hints' })
 -- Toggling comments
 map('n', '<leader>/', ':norm gcc<CR>', { remap = true, desc = 'Toggle comments' })
 map('v', '<leader>/', 'gc', { remap = true, desc = 'Toggle comments' })
+map('n', '<leader>h', ':ClangdSwitchSourceHeader<CR>', { remap = true, desc = 'Switch source/header' })
 
 -- Alt + jk to move line up/down
 -- map('n', '<A-j>', ':m .+1<cr>==', { noremap = true, silent = true, desc = 'Move line down' })
