@@ -1118,6 +1118,7 @@ require('conform').setup {
     rust = { 'cargo', lsp_format = 'first' },
     proto = { 'buf' },
     toml = { 'taplo' },
+    typescript = { 'prettier' },
     -- Conform can also run multiple formatters sequentially
     -- python = { "isort", "black" },
     --
