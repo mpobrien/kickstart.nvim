@@ -29,6 +29,15 @@ map({ 'n', 'v' }, '<leader>P', '"+P', { desc = 'Paste from system clipboard befo
 map('n', '<leader>e', function()
   vim.diagnostic.open_float(0, { scope = 'line' })
 end)
+
+map('n', '<leader>dl', "<cmd>lua require'dap'.step_into()<CR>", { desc = 'Debugger step into' })
+map('n', '<leader>dj', "<cmd>lua require'dap'.step_over()<CR>", { desc = 'Debugger step over' })
+map('n', '<leader>dk', "<cmd>lua require'dap'.step_out()<CR>", { desc = 'Debugger step out' })
+map('n', '<leader>dc', "<cmd>lua require'dap'.continue()<CR>", { desc = 'Debugger continue' })
+map('n', '<leader>db', "<cmd>lua require'dap'.toggle_breakpoint()<CR>", { desc = 'Debugger toggle breakpoint' })
+map('n', '<leader>de', "<cmd>lua require'dap'.terminate()<CR>", { desc = 'Debugger reset' })
+map('n', '<leader>dr', "<cmd>lua require'dap'.run_last()<CR>", { desc = 'Debugger run last' })
+
 -- map <space>e :lua vim.diagnostic.open_float(0, {scope="line"})<CR>
 --
 

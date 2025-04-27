@@ -231,8 +231,61 @@ require('lazy').setup({
   'rktjmp/lush.nvim',
   {
     'mfussenegger/nvim-dap',
+    dependencies = {
+      { 'igorlfs/nvim-dap-view', opts = {} },
+    },
+
+    config = function()
+      local dap, dapui = require 'dap', require 'dapui'
+      local codelldb = require('mason-registry').get_package('codelldb'):get_install_path() .. '/codelldb'
+      dap.adapters.codelldb = {
+        type = 'server',
+        port = '${port}',
+        executable = {
+          command = codelldb,
+          args = { '--port', '${port}' },
+        },
+      }
+
+      dap.configurations.rust = {
+        {
+          name = 'Rust debug',
+          type = 'codelldb',
+          request = 'launch',
+          showDisassembly = 'never',
+          program = function()
+            vim.fn.jobstart 'cargo build'
+            return vim.fn.input {
+              prompt = 'Path to executable: ',
+              default = vim.fn.getcwd() .. '/target/debug/',
+              completion = 'file',
+            }
+          end,
+          cwd = '${workspaceFolder}',
+          stopOnEntry = true,
+        },
+      }
+      dap.listeners.before.attach.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        dapui.close()
+      end
+    end,
   },
-  { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' } },
+  {
+    'rcarriga/nvim-dap-ui',
+    dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
+    config = function()
+      require('dapui').setup()
+    end,
+  },
   {
     'goolord/alpha-nvim',
     dependencies = { 'echasnovski/mini.icons' },
@@ -1286,36 +1339,3 @@ require('oil').setup()
 
 -- Underline context section to separate it from main code.
 vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline = true, sp = 'Grey' })
-
-local dap = require 'dap'
-
--- CodeLLDB debug adapter location
-codelldb_path = vim.fn.stdpath 'data' .. '/mason/packages/codelldb/extension/adapter/codelldb'
-
--- Configure LLDB adapter
-dap.adapters.lldb = {
-  type = 'server',
-  port = '${port}',
-  executable = {
-    command = codelldb_path,
-    args = { '--port', '${port}' },
-    detached = false,
-  },
-}
-
--- Default debug configuration for C, C++
-dap.configurations.c = {
-  {
-    name = 'Debug an Executable',
-    type = 'lldb',
-    request = 'launch',
-    program = function()
-      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-    end,
-    cwd = '${workspaceFolder}',
-    stopOnEntry = false,
-  },
-}
-
-dap.configurations.cpp = dap.configurations.c
-dap.configurations.rust = dap.configurations.c
