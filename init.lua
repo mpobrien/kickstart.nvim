@@ -230,6 +230,10 @@ require('lazy').setup({
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'rktjmp/lush.nvim',
   {
+    'mfussenegger/nvim-dap',
+  },
+  { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' } },
+  {
     'goolord/alpha-nvim',
     dependencies = { 'echasnovski/mini.icons' },
     config = function()
@@ -243,7 +247,6 @@ require('lazy').setup({
         '░███ ░███ ░███░░░  ░███ ░███ ░░███ ███   ░███  ░███ ░███ ░███ ',
         '████ █████░░██████ ░░██████   ░░█████    █████ █████░███ █████',
         '░░░ ░░░░░  ░░░░░░   ░░░░░░     ░░░░░    ░░░░░ ░░░░░ ░░░ ░░░░░',
-        t,
       }
       require('alpha').setup(theme.config)
     end,
@@ -427,11 +430,11 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          mappings = {
+            i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          },
+        },
         pickers = {
           colorscheme = {
             enable_preview = true,
@@ -453,6 +456,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>sl', builtin.lsp_references, { desc = '[S]earch [L]SP References' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -1004,6 +1008,25 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  {
+    'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
+    event = 'InsertEnter',
+    config = function()
+      require('copilot').setup {}
+    end,
+  },
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -1228,7 +1251,7 @@ require('blame').setup {}
 require('treesitter-context').setup {
   enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
   max_lines = 20,
-  min_window_height = 50,
+  min_window_height = 40,
   line_numbers = true,
   multiline_threshold = 15, -- Maximum number of lines to show for a single context
   trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
@@ -1246,6 +1269,8 @@ require('conform').setup {
   end,
 }
 
+require('oil').setup()
+
 -- vim.g.clipboard = {
 --   name = 'myClipboard',
 --   copy = {
@@ -1261,3 +1286,36 @@ require('conform').setup {
 
 -- Underline context section to separate it from main code.
 vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline = true, sp = 'Grey' })
+
+local dap = require 'dap'
+
+-- CodeLLDB debug adapter location
+codelldb_path = vim.fn.stdpath 'data' .. '/mason/packages/codelldb/extension/adapter/codelldb'
+
+-- Configure LLDB adapter
+dap.adapters.lldb = {
+  type = 'server',
+  port = '${port}',
+  executable = {
+    command = codelldb_path,
+    args = { '--port', '${port}' },
+    detached = false,
+  },
+}
+
+-- Default debug configuration for C, C++
+dap.configurations.c = {
+  {
+    name = 'Debug an Executable',
+    type = 'lldb',
+    request = 'launch',
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = '${workspaceFolder}',
+    stopOnEntry = false,
+  },
+}
+
+dap.configurations.cpp = dap.configurations.c
+dap.configurations.rust = dap.configurations.c

@@ -11,6 +11,7 @@ end, { desc = 'Toggle inlay hints' })
 map('n', '<leader>/', ':norm gcc<CR>', { remap = true, desc = 'Toggle comments' })
 map('v', '<leader>/', 'gc', { remap = true, desc = 'Toggle comments' })
 map('n', '<leader>ch', ':ClangdSwitchSourceHeader<CR>', { remap = true, desc = 'Switch source/header' })
+map('n', '<leader>.', ':b#<CR>', { remap = true, desc = 'Switch source/header' })
 
 -- Alt + jk to move line up/down
 -- map('n', '<A-j>', ':m .+1<cr>==', { noremap = true, silent = true, desc = 'Move line down' })
@@ -29,3 +30,6 @@ map('n', '<leader>e', function()
   vim.diagnostic.open_float(0, { scope = 'line' })
 end)
 -- map <space>e :lua vim.diagnostic.open_float(0, {scope="line"})<CR>
+--
+
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
