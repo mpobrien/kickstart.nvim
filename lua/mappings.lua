@@ -21,6 +21,9 @@ map('n', '<leader>.', ':b#<CR>', { remap = true, desc = 'Switch source/header' }
 -- map('x', '<A-j>', ":m '>+1<cr>gv=gv", { noremap = true, silent = true, desc = 'Move block down' })
 -- map('x', '<A-k>', ":m '<-2<cr>gv=gv", { noremap = true, silent = true, desc = 'Move block up' })
 
+-- Git Linker: get github link (upstream) for current selected line or range
+map({ 'n', 'v' }, '<leader>gy', ':GitLink remote=upstream<CR>', { desc = 'Get github upstream link for current selected line or range' })
+
 -- Copy/paste to/from system clipboard
 map({ 'n', 'v' }, '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
 map({ 'n', 'v' }, '<leader>Y', '"+Y', { desc = 'Yank line to system clipboard' })
