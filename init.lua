@@ -127,6 +127,11 @@ require('lazy').setup({
         desc = 'Buffer Diagnostics (Trouble)',
       },
       {
+        '<leader>xs',
+        '<cmd>Trouble diagnostics toggle filter.severity=vim.diagnostic.severity.ERROR<cr>',
+        desc = 'Toggle severity filter (Trouble)',
+      },
+      {
         '<leader>cs',
         '<cmd>Trouble symbols toggle focus=false<cr>',
         desc = 'Symbols (Trouble)',

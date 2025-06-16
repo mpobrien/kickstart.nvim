@@ -2,6 +2,8 @@ local map = vim.keymap.set
 
 map('n', '<S-h>', ':bprev<Enter>', { desc = 'Switch to next buffer' })
 map('n', '<S-l>', ':bnext<Enter>', { desc = 'Switch to prev buffer' })
+map('n', '<C-S-h>', ':tabprev<Enter>', { desc = 'Switch to next tab' })
+map('n', '<C-S-l>', ':tabnext<Enter>', { desc = 'Switch to prev tab' })
 
 map('n', '<leader>h', function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
