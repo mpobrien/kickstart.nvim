@@ -112,6 +112,10 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   {
+    'terrastruct/d2-vim',
+    ft = { 'd2' },
+  },
+  {
     'folke/trouble.nvim',
     opts = {}, -- for default options, refer to the configuration section for custom setup.
     cmd = 'Trouble',
@@ -253,6 +257,15 @@ require('lazy').setup({
   'FabijanZulj/blame.nvim',
 
   -- color schemes
+  'fatih/molokai',
+  'CodeGradox/onehalf-lush',
+  'catppuccin/nvim',
+  'sainnhe/edge',
+  'd00h/nvim-rusticated',
+  'rose-pine/neovim',
+  'protesilaos/tempus-themes',
+  'savq/melange-nvim',
+  'sainnhe/everforest',
   'jonathanfilip/vim-lucius',
   'luisiacc/gruvbox-baby',
   'kabouzeid/nvim-jellybeans',
@@ -1186,6 +1199,7 @@ vim.opt.wrap = false
 
 vim.cmd [[colorscheme jellybeans]]
 vim.cmd [[highlight Normal guibg=#101010]]
+-- vim.cmd [[colorscheme github_light_default]]
 
 vim.api.nvim_create_user_command('FormatDisable', function(args)
   if args.bang then
@@ -1245,3 +1259,28 @@ require('oil').setup()
 
 -- Underline context section to separate it from main code.
 vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline = true, sp = 'Grey' })
+
+vim.diagnostic.config { virtual_lines = true }
+
+-- Function to display ANSI escape codes in buffer.
+-- https://vi.stackexchange.com/a/45683
+function ansi_colorize()
+  vim.wo.number = false
+  vim.wo.relativenumber = false
+  vim.wo.statuscolumn = ''
+  vim.wo.signcolumn = 'no'
+  vim.opt.listchars = { space = ' ' }
+
+  local buf = vim.api.nvim_get_current_buf()
+
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  while #lines > 0 and vim.trim(lines[#lines]) == '' do
+    lines[#lines] = nil
+  end
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, {})
+
+  vim.api.nvim_chan_send(vim.api.nvim_open_term(buf, {}), table.concat(lines, '\r\n'))
+  vim.keymap.set('n', 'q', '<cmd>qa!<cr>', { silent = true, buffer = buf })
+  vim.api.nvim_create_autocmd('TextChanged', { buffer = buf, command = 'normal! G$' })
+  vim.api.nvim_create_autocmd('TermEnter', { buffer = buf, command = 'stopinsert' })
+end
