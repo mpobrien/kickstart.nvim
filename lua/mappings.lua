@@ -34,6 +34,10 @@ map({ 'n', 'v' }, '<leader>P', '"+P', { desc = 'Paste from system clipboard befo
 map('n', '<leader>e', function()
   vim.diagnostic.open_float(0, { scope = 'line' })
 end)
+map('n', '<leader>E', function()
+  local current = vim.diagnostic.config().virtual_lines
+  vim.diagnostic.config { virtual_lines = not current }
+end)
 
 map('n', '<leader>dl', "<cmd>lua require'dap'.step_into()<CR>", { desc = 'Debugger step into' })
 map('n', '<leader>dj', "<cmd>lua require'dap'.step_over()<CR>", { desc = 'Debugger step over' })
