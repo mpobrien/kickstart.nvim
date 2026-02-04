@@ -111,7 +111,7 @@ vim.opt.rtp:prepend(lazypath)
 --    :Lazy
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  "chentoast/marks.nvim",
+  'chentoast/marks.nvim',
   {
     'terrastruct/d2-vim',
     ft = { 'd2' },
@@ -174,63 +174,6 @@ require('lazy').setup({
       -- vim.keymap.set('n', '<leader>oq', before.show_edits_in_quickfix, {})
       -- -- Look for previous edits in telescope (needs telescope, obviously)
       -- vim.keymap.set('n', '<leader>oe', before.show_edits_in_telescope, {})
-    end,
-  },
-  {
-    'mfussenegger/nvim-dap',
-    dependencies = {
-      { 'igorlfs/nvim-dap-view', opts = {} },
-    },
-
-    config = function()
-      local dap, dapui = require 'dap', require 'dapui'
-      local codelldb = require('mason-registry').get_package('codelldb'):get_install_path() .. '/codelldb'
-      dap.adapters.codelldb = {
-        type = 'server',
-        port = '${port}',
-        executable = {
-          command = codelldb,
-          args = { '--port', '${port}' },
-        },
-      }
-
-      dap.configurations.rust = {
-        {
-          name = 'Rust debug',
-          type = 'codelldb',
-          request = 'launch',
-          showDisassembly = 'never',
-          program = function()
-            vim.fn.jobstart 'cargo build'
-            return vim.fn.input {
-              prompt = 'Path to executable: ',
-              default = vim.fn.getcwd() .. '/target/debug/',
-              completion = 'file',
-            }
-          end,
-          cwd = '${workspaceFolder}',
-          stopOnEntry = true,
-        },
-      }
-      dap.listeners.before.attach.dapui_config = function()
-        dapui.open()
-      end
-      dap.listeners.before.launch.dapui_config = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated.dapui_config = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited.dapui_config = function()
-        dapui.close()
-      end
-    end,
-  },
-  {
-    'rcarriga/nvim-dap-ui',
-    dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
-    config = function()
-      require('dapui').setup()
     end,
   },
   {
@@ -945,31 +888,6 @@ require('lazy').setup({
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
-  },
-  { -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
   {
     'zbirenbaum/copilot.lua',
