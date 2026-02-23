@@ -25,6 +25,7 @@ map('n', '<leader>.', ':b#<CR>', { remap = true, desc = 'Switch source/header' }
 
 -- Git Linker: get github link (upstream) for current selected line or range
 map({ 'n', 'v' }, '<leader>gy', ':GitLink remote=upstream<CR>', { desc = 'Get github upstream link for current selected line or range' })
+map({ 'n', 'v' }, '<leader>go', ':GitLink remote=origin<CR>', { desc = 'Get github upstream link for current selected line or range' })
 
 -- Copy/paste to/from system clipboard
 map({ 'n', 'v' }, '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
