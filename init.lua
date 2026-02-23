@@ -1009,8 +1009,14 @@ local lspconfig = require 'lspconfig'
 --
 lspconfig.rust_analyzer.setup {
   -- on_attach = on_attach,
+  cmd = vim.lsp.rpc.connect('127.0.0.1', 27631),
   settings = {
     ['rust-analyzer'] = {
+      lspMux = {
+        version = '1',
+        method = 'connect',
+        server = 'rust-analyzer',
+      },
       imports = {
         granularity = {
           group = 'module',
@@ -1153,8 +1159,8 @@ vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 vim.opt.wrap = false
 
-vim.cmd [[colorscheme jellybeans]]
 vim.cmd [[highlight Normal guibg=#101010]]
+vim.cmd [[colorscheme jellybeans]]
 -- vim.cmd [[colorscheme github_light_default]]
 
 vim.api.nvim_create_user_command('FormatDisable', function(args)
@@ -1198,7 +1204,11 @@ require('conform').setup {
   end,
 }
 
-require('oil').setup()
+require('oil').setup {
+  view_options = {
+    show_hidden = true,
+  },
+}
 
 -- vim.g.clipboard = {
 --   name = 'myClipboard',
