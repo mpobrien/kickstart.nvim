@@ -40,13 +40,22 @@ map('n', '<leader>E', function()
   vim.diagnostic.config { virtual_lines = not current }
 end)
 
-map('n', '<leader>dl', "<cmd>lua require'dap'.step_into()<CR>", { desc = 'Debugger step into' })
-map('n', '<leader>dj', "<cmd>lua require'dap'.step_over()<CR>", { desc = 'Debugger step over' })
-map('n', '<leader>dk', "<cmd>lua require'dap'.step_out()<CR>", { desc = 'Debugger step out' })
-map('n', '<leader>dc', "<cmd>lua require'dap'.continue()<CR>", { desc = 'Debugger continue' })
-map('n', '<leader>db', "<cmd>lua require'dap'.toggle_breakpoint()<CR>", { desc = 'Debugger toggle breakpoint' })
-map('n', '<leader>de', "<cmd>lua require'dap'.terminate()<CR>", { desc = 'Debugger reset' })
-map('n', '<leader>dr', "<cmd>lua require'dap'.run_last()<CR>", { desc = 'Debugger run last' })
+map('n', '<leader>cy', function()
+  local abs = vim.fn.expand '%:p'
+  local root = vim.fs.root(abs, '.git')
+  local ref = root and abs:sub(#root + 2) or abs
+  ref = ref .. ':' .. vim.fn.line '.'
+  vim.fn.setreg('+', ref)
+  vim.notify('Yanked ' .. ref)
+end, { desc = 'Yank file:lineno to clipboard' })
+
+-- map('n', '<leader>dl', "", { desc = 'Debugger step into' })
+-- map('n', '<leader>dj', "<cmd>lua require'dap'.step_over()<CR>", { desc = 'Debugger step over' })
+-- map('n', '<leader>dk', "<cmd>lua require'dap'.step_out()<CR>", { desc = 'Debugger step out' })
+-- map('n', '<leader>dc', "<cmd>lua require'dap'.continue()<CR>", { desc = 'Debugger continue' })
+-- map('n', '<leader>db', "<cmd>lua require'dap'.toggle_breakpoint()<CR>", { desc = 'Debugger toggle breakpoint' })
+-- map('n', '<leader>de', "<cmd>lua require'dap'.terminate()<CR>", { desc = 'Debugger reset' })
+-- map('n', '<leader>dr', "<cmd>lua require'dap'.run_last()<CR>", { desc = 'Debugger run last' })
 
 -- map <space>e :lua vim.diagnostic.open_float(0, {scope="line"})<CR>
 --

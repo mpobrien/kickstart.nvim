@@ -111,6 +111,53 @@ vim.opt.rtp:prepend(lazypath)
 --    :Lazy
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
+  {
+    'pwntester/octo.nvim',
+    cmd = 'Octo',
+    opts = {
+      -- or "fzf-lua" or "snacks" or "default"
+      picker = 'telescope',
+      -- bare Octo command opens picker of commands
+      enable_builtin = true,
+    },
+    keys = {
+      {
+        '<leader>oi',
+        '<CMD>Octo issue list<CR>',
+        desc = 'List GitHub Issues',
+      },
+      {
+        '<leader>op',
+        '<CMD>Octo pr list<CR>',
+        desc = 'List GitHub PullRequests',
+      },
+      {
+        '<leader>od',
+        '<CMD>Octo discussion list<CR>',
+        desc = 'List GitHub Discussions',
+      },
+      {
+        '<leader>on',
+        '<CMD>Octo notification list<CR>',
+        desc = 'List GitHub Notifications',
+      },
+      {
+        '<leader>os',
+        function()
+          require('octo.utils').create_base_search_command { include_current_repo = true }
+        end,
+        desc = 'Search GitHub',
+      },
+    },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      -- OR "ibhagwan/fzf-lua",
+      -- OR "folke/snacks.nvim",
+      'nvim-tree/nvim-web-devicons', -- optional if file_panel.icons is a function
+    },
+  },
+
   'chentoast/marks.nvim',
   {
     'terrastruct/d2-vim',
@@ -463,7 +510,7 @@ require('lazy').setup({
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
-      { 'saghen/blink.cmp' },
+      { 'saghen/blink.cmp', dependencies = { 'saghen/blink.lib' } },
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
@@ -654,17 +701,17 @@ require('lazy').setup({
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+      -- Applied on top of every server's config, including the ones defined
+      -- outside this table.
+      vim.lsp.config('*', { capabilities = capabilities })
+
+      for server_name, server in pairs(servers) do
+        vim.lsp.config(server_name, server)
+      end
+
       require('mason-lspconfig').setup {
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
+        ensure_installed = vim.tbl_keys(servers or {}),
+        automatic_enable = true,
       }
     end,
   },
@@ -1001,13 +1048,11 @@ vim.schedule(function()
   require 'mappings'
 end)
 
-local lspconfig = require 'lspconfig'
-
 -- local on_attach = function(client)
 -- require('completion').on_attach(client)
 -- end
 --
-lspconfig.rust_analyzer.setup {
+vim.lsp.config('rust_analyzer', {
   -- on_attach = on_attach,
   cmd = vim.lsp.rpc.connect('127.0.0.1', 27631),
   settings = {
@@ -1038,7 +1083,8 @@ lspconfig.rust_analyzer.setup {
       },
     },
   },
-}
+})
+vim.lsp.enable 'rust_analyzer'
 
 -- NB: conform setup should happen after LSP settings are applied so that
 -- lsp fallbacks work the way you'd want/expect.
@@ -1088,12 +1134,11 @@ local exists = function(name)
 end
 
 if exists '/usr/bin/clangd-18' then
-  lspconfig.clangd.setup {
+  vim.lsp.config('clangd', {
     cmd = { '/usr/bin/clangd-18' },
-  }
-else
-  lspconfig.clangd.setup {}
+  })
 end
+vim.lsp.enable 'clangd'
 
 if vim.env.SSH_CLIENT == nil or vim.env.SSH_CLIENT == '' then
   -- Disable neoscroll over SSH since it can be laggy.
@@ -1145,14 +1190,13 @@ require('gitlinker').setup()
 -- }
 
 if exists '/usr/bin/clangd-18' then
-  lspconfig.clangd.setup {
+  vim.lsp.config('clangd', {
     cmd = { '/usr/bin/clangd-18' },
-  }
-else
-  lspconfig.clangd.setup {}
+  })
 end
+vim.lsp.enable 'clangd'
 
-lspconfig.dafny.setup {}
+vim.lsp.enable 'dafny'
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
@@ -1204,6 +1248,23 @@ require('conform').setup {
   end,
 }
 
+-- doesn't work but would be nice if it did
+-- require('nvim-treesitter.configs').setup {
+--   textobjects = {
+--     move = {
+--       enable = true,
+--       goto_previous_start = {
+--         ['[c'] = '@class.outer', -- impl / struct / trait block
+--         ['[f'] = '@function.outer', -- enclosing fn
+--       },
+--       goto_next_start = {
+--         [']c'] = '@class.outer',
+--         [']f'] = '@function.outer',
+--       },
+--     },
+--   },
+-- }
+
 require('oil').setup {
   view_options = {
     show_hidden = true,
@@ -1250,3 +1311,5 @@ function ansi_colorize()
   vim.api.nvim_create_autocmd('TextChanged', { buffer = buf, command = 'normal! G$' })
   vim.api.nvim_create_autocmd('TermEnter', { buffer = buf, command = 'stopinsert' })
 end
+
+vim.opt.rtp:prepend '/Users/mikeo/projects/p-nvim'
